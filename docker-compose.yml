@@ -15,7 +15,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U voucher_user"]
-      interal: 10s
+      interval: 10s
       timeout: 5s
       retries: 5
     networks:
@@ -47,7 +47,7 @@ services:
     ports:
       - "2181:2181"
     volumes:
-      - zookeeper_data:var/lib/zookeeper/data
+      - zookeeper_data:/var/lib/zookeeper/data
     networks:
       - voucher_network
 
