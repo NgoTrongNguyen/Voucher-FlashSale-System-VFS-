@@ -1,0 +1,320 @@
+# ============================================================
+# PYTHON
+# ============================================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+backend/.env
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# ============================================================
+# NODE.JS / FRONTEND
+# ============================================================
+# Dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+package-lock.json
+yarn.lock
+
+# Production
+/build
+/dist
+/.next
+/out
+
+# Misc
+.DS_Store
+*.pem
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Next.js
+.next
+out
+
+# React
+.eslintcache
+
+# ============================================================
+# IDE / EDITOR
+# ============================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.AppleDouble
+.LSOverride
+*.sublime-project
+*.sublime-workspace
+.vim/
+.emacs.desktop
+.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# VS Code specific
+.vscode-test/
+.vscode-nls.json
+launch.json
+settings.json
+
+# ============================================================
+# DOCKER
+# ============================================================
+.dockerignore
+docker-compose.override.yml
+
+# ============================================================
+# DATABASE
+# ============================================================
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# ============================================================
+# LOGS
+# ============================================================
+*.log
+logs/
+log/
+
+# ============================================================
+# OS SPECIFIC
+# ============================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+
+# ============================================================
+# BUILD / DIST
+# ============================================================
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ============================================================
+# TEMPORARY FILES
+# ============================================================
+*.tmp
+*.temp
+*.bak
+*.backup
+*~
+.~*
+
+# ============================================================
+# CREDENTIALS & SECRETS
+# ============================================================
+.env
+.env.local
+.env.*.local
+secrets.json
+credentials.json
+.aws/
+.ssh/
+private_key*
+secret*
+
+# ============================================================
+# VSCODE EXTENSIONS & SETTINGS
+# ============================================================
+extensions/
+.vscode-test/
+
+# ============================================================
+# MISC PROJECT FILES
+# ============================================================
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temp files
+*.swp
+*.swo
+*~
+
+# Test coverage
+htmlcov/
+.coverage
+
+# ============================================================
+# UPLOADS & GENERATED FILES
+# ============================================================
+uploads/
+generated/
+temp/
+tmp/
+cache/
+
+# ============================================================
+# SPECIFIC TO THIS PROJECT
+# ============================================================
+# Backend
+backend/venv/
+backend/.venv/
+backend/__pycache__/
+backend/*.egg-info/
+backend/dist/
+backend/build/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.next/
+frontend/out/
+
+# Database backups
+*.sql
+*.sql.bak
+
+# Redis dumps
+dump.rdb
+
+# Kafka logs (if running locally without Docker)
+kafka-logs/
+zookeeper-logs/
