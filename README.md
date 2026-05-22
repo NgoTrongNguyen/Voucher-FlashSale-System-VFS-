@@ -89,14 +89,16 @@ voucher-flashsale-system/
 │   └── app/
 │       ├── __init__.py
 │       ├── main.py             # FastAPI app chính
-│       ├── config.py           # Quản lý config (Pydantic)
+│       ├── config.py           # Quản lý config dùng để qlý biến MT (Pydantic)
 │       ├── consumer.py         # Kafka consumer worker
 │       │
 │       ├── core/               # Kết nối hạ tầng
+|       |   ├── __init__.py
 │       │   ├── redis_client.py # Redis connection pool
 │       │   └── kafka_client.py # Kafka producer
 │       │
 │       ├── database/           # Tầng data access
+|       |   ├── __init__.py
 │       │   ├── session.py      # SQLAlchemy config
 │       │   └── models.py       # DB models (User, Campaign, Voucher)
 │       │
