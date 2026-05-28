@@ -99,6 +99,32 @@ class RedisClient:
     # Inventory operations (Voucher)
     #--------------------
 
+    def get_inventory(self, voucher_id: int) -> int:
+        # Get the inventory count for a voucher
+        inventory_key = f"voucher:{voucher_id}:inventory"
+        value = self.get(inventory_key)
+        return int(value) if value else None
     
+    def set_inventory(self, voucher_id: int, count: int, ex: int = None):
+        # Set the inventory count for a voucher
+        inventory_key = f"voucher:{voucher_id}:inventory"
+        self.set(inventory_key, count, ex = ex)
+
+    def decrement_inventory(self, voucher_id: int) -> int:
+        # Decrement the inventory count
+        inventory_key = f"voucher:{voucher_id}:inventory"
+        return self.decr(inventory_key)  
+
+    #--------------------
+    # User lock operations (Voucher)
+    #--------------------
+
+    def set_lock_user(self, user_id: int, cooldown: int):
+        key = f"user:{user_id}:lock"
+        self.set(key, "1", ex = cooldown)
+
+    def is_user_locked(self, user_id: int) -> bool:
+        key = f"user:{user_id}:lock"
+        return self.exists(key)
 
 redis_client = RedisClient()
