@@ -1,4 +1,10 @@
-import redis
+try:
+    import redis  # type: ignore[import]
+except ImportError as exc:
+    raise ImportError(
+        "Missing required dependency 'redis'. Install it with 'pip install redis'."
+    ) from exc
+
 import os
 from typing import Any, List
 from app.config import settings
@@ -56,5 +62,43 @@ class RedisClient:
     #--------------------
     # Basic Redis operations
     #--------------------
+    
+    def set(self, key: str, value: Any, ex: int = None) ->bool:
+        # Set a key-value pair with optional expiration
+        return self.client.set(key, value, ex = ex)
+    
+    def get(self, key: str) -> Any:
+        # Get the value of a key
+        return self.client.get(key)
+    
+    def delete(self, key: str) -> int:
+        # Delete a key
+        return self.client.delete(key)
+    
+    def exists(self, key: str) -> bool:
+        # Check if a key exists
+        return self.client.exists(key) > 0
+    
+    def incr(self, key: str, amount: int = 1) -> int:
+        # Increment the integer value
+        return self.client.incr(key, amount)
+    
+    def decr(self, key: str, amount: int = 1) -> int:
+        # Decrement the integer value
+        return self.client.decr(key, amount)
+    
+    def expire(self, key: str, time: int) -> bool:
+        # Set a key's time to live
+        return self.client.expire(key, time)
+    
+    def ttl(self, key: str) -> int:
+        # Get the time to live of a key
+        return self.client.ttl(key)
+    
+    #--------------------
+    # Inventory operations (Voucher)
+    #--------------------
+
+    
 
 redis_client = RedisClient()
