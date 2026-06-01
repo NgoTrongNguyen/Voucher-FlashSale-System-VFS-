@@ -1,48 +1,48 @@
-# 🎯 Hệ Thống Săn Voucher Flash Sale Tốc Độ Cao
+# Hệ Thống Săn Voucher Flash Sale Tốc Độ Cao
 
 Một hệ thống thương mại điện tử mô phỏng cơ chế săn voucher giảm giá trong khung giờ vàng (flash sale). Hệ thống được thiết kế để xử lý **hàng nghìn request đồng thời** mà không bị chậm, ngẽn database hay bán lố hàng.
 
 ---
 
-## 🏛️ Kiến Trúc Hệ Thống
+## Kiến Trúc Hệ Thống
 
 Hệ thống sử dụng kiến trúc **3 tầng + 2 lớp chắn**:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                  Frontend (React)                       │
-│          [Nút Săn] → [Đếm ngược] → [Trạng thái]       │
+│          [Nút Săn] → [Đếm ngược] → [Trạng thái]         │
 └──────────────────────┬──────────────────────────────────┘
                        │ HTTP Request
 ┌──────────────────────▼──────────────────────────────────┐
-│            ⚡ FastAPI Server (Port 8000)               │
+│            FastAPI Server (Port 8000)                   │
 │              [Validate Request]                         │
 └──────────────────────┬──────────────────────────────────┘
                        │
         ┌──────────────┴──────────────┐
         │                             │
 ┌───────▼─────────────────┐   ┌──────▼──────────────────┐
-│  🔴 LỚP CHẮN 1: Redis   │   │  🔴 LỚP CHẮN 2: Kafka │
+│  LỚP CHẮN 1: Redis      │   │  LỚP CHẮN 2: Kafka      │
 │                         │   │                         │
-│ • Check trùng lặp      │   │ • Queue Request         │
-│ • Trừ kho (Atomic)     │   │ • Giảm áp hệ thống     │
-│ • Lua Script (nguyên tử)│   │ • Đảm bảo thứ tự       │
+│ • Check trùng lặp       │   │ • Queue Request         │
+│ • Trừ kho (Atomic)      │   │ • Giảm áp hệ thống      │
+│ • Lua Script (nguyên tử)│   │ • Đảm bảo thứ tự        │
 └───────┬─────────────────┘   └──────┬──────────────────┘
         │ Hợp lệ?               │ Đẩy vào
         │ YES → Event           │ Topic
         └───────────┬───────────┘
                     │
          ┌──────────▼──────────┐
-         │  🔧 Worker Process  │
+         │  Worker Process     │
          │  (Kafka Consumer)   │
          │                     │
-         │ • Tiêu thụ message │
-         │ • Ghi DB an toàn   │
+         │ • Tiêu thụ message  │
+         │ • Ghi DB an toàn    │
          └──────────┬──────────┘
                     │
-         ┌──────────▼──────────┐
-         │  🗄️ PostgreSQL     │
-         │  (Database gốc)    │
+         ┌──────────▼────────┐
+         │  PostgreSQL       │
+         │  (Database gốc)   │
          └───────────────────┘
 ```
 
@@ -52,15 +52,15 @@ Hệ thống sử dụng kiến trúc **3 tầng + 2 lớp chắn**:
 2. **Redis kiểm tra**:
    - Người dùng này đã săn trong 1s qua chưa? (Anti-cheat)
    - Còn hàng không? (Atomic decrement)
-3. **Nếu hợp lệ** → Kafka nhận event → trả về "✅ Đang xử lý"
+3. **Nếu hợp lệ** → Kafka nhận event → trả về "Đang xử lý"
 4. **Worker xử lý từ từ** → Ghi vào DB → Cập nhật trạng thái
 5. **Frontend poll trạng thái** → Hiển thị kết quả
 
-**Kết quả**: Response nhanh (< 50ms) + Không bán lố + Không ngẽn DB 🚀
+**Kết quả**: Response nhanh (< 50ms) + Không bán lố + Không ngẽn DB
 
 ---
 
-## 📦 Công Nghệ Sử Dụng
+## Công Nghệ Sử Dụng
 
 | Công Nghệ | Phiên Bản | Vai Trò |
 |-----------|----------|--------|
@@ -73,16 +73,16 @@ Hệ thống sử dụng kiến trúc **3 tầng + 2 lớp chắn**:
 
 ---
 
-## 📂 Cấu Trúc Thư Mục
+## Cấu Trúc Thư Mục
 
 ```
 voucher-flashsale-system/
 │
-├── docker-compose.yml          # 🐳 Khởi động hạ tầng (Postgres, Redis, Kafka)
-├── README.md                   # 📖 Tài liệu này
+├── docker-compose.yml          # Khởi động hạ tầng (Postgres, Redis, Kafka)
+├── README.md                   # Tài liệu này
 ├── .gitignore                  # Git ignore rules
 │
-├── backend/                    # ⚙️ API Server & Workers
+├── backend/                    # API Server & Workers
 │   ├── .env                    # Biến môi trường (bí mật)
 │   ├── requirements.txt        # Dependencies Python
 │   │
@@ -111,7 +111,7 @@ voucher-flashsale-system/
 │       └── scripts/            # Tập lệnh hỗ trợ
 │           └── claim_voucher.lua # Lua script cho Redis
 │
-└── frontend/                   # 🖥️ React UI
+└── frontend/                   # React UI
     ├── package.json
     ├── public/
     └── src/
@@ -127,7 +127,7 @@ voucher-flashsale-system/
 
 ---
 
-## 🚀 Hướng Dẫn Cài Đặt & Chạy
+## Hướng Dẫn Cài Đặt & Chạy
 
 ### **Yêu Cầu Hệ Thống**
 - Docker & Docker Compose
@@ -137,7 +137,7 @@ voucher-flashsale-system/
 
 ---
 
-### **1️⃣ Khởi Động Hạ Tầng (Bắt Buộc)**
+### **1. Khởi Động Hạ Tầng (Bắt Buộc)**
 
 ```bash
 # Tại thư mục gốc dự án
@@ -164,7 +164,7 @@ docker compose exec kafka kafka-topics --bootstrap-server localhost:9092 --list
 
 ---
 
-### **2️⃣ Cài Đặt & Chạy Backend**
+### **2. Cài Đặt & Chạy Backend**
 
 #### **Cài đặt Dependencies**
 
@@ -229,7 +229,7 @@ INFO:     Kafka consumer started, listening on topic: voucher-claims
 
 ---
 
-### **3️⃣ Cài Đặt & Chạy Frontend**
+### **3. Cài Đặt & Chạy Frontend**
 
 ```bash
 cd frontend
@@ -249,11 +249,11 @@ Local:            http://localhost:3000
 On Your Network:  http://192.168.x.x:3000
 ```
 
-Truy cập: **http://localhost:3000** ✅
+Truy cập: **http://localhost:3000**
 
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 ### **Lấy danh sách chiến dịch flash sale**
 ```http
@@ -327,7 +327,7 @@ Response:
 
 ---
 
-## 🧪 Testing & Debugging
+## Testing & Debugging
 
 ### **Test API bằng cURL**
 
@@ -370,7 +370,7 @@ SELECT * FROM vouchers;
 
 ---
 
-## 🔒 Chặn Overselling & Race Condition
+## Chặn Overselling & Race Condition
 
 ### **Cơ chế Anti-Cheat (Redis Lua Script)**
 
@@ -401,7 +401,7 @@ return {1, "Thành công"}
 
 ---
 
-## 📊 Hiệu Năng & Metrics
+## Hiệu Năng & Metrics
 
 | Chỉ số | Giá trị | Ghi chú |
 |--------|--------|--------|
@@ -413,7 +413,7 @@ return {1, "Thành công"}
 
 ---
 
-## 🛠️ Lệnh Hữu Ích
+## Lệnh Hữu Ích
 
 ```bash
 # ============== Docker ==============
@@ -459,7 +459,7 @@ docker compose exec kafka kafka-console-producer --broker-list localhost:9092 --
 
 ---
 
-## 📝 Biến Môi Trường
+## Biến Môi Trường
 
 **`backend/.env`** mẫu:
 
@@ -486,7 +486,7 @@ API_HOST=0.0.0.0
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### **Container fails khi khởi động**
 
@@ -539,7 +539,7 @@ app.add_middleware(
 
 ---
 
-## 📚 Tài Liệu Tham Khảo
+## Tài Liệu Tham Khảo
 
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
 - [Redis Lua Scripts](https://redis.io/docs/interact/programmability/lua-api/)
@@ -549,15 +549,15 @@ app.add_middleware(
 
 ---
 
-## 🎓 Học Tập & Cải Tiến
+## Học Tập & Cải Tiến
 
 ### **Concepts được thực hành:**
-- ✅ Async/Await trong Python (FastAPI)
-- ✅ Lua Scripts cho atomic operations
-- ✅ Message Queue pattern (Kafka)
-- ✅ Caching layer (Redis)
-- ✅ Database transaction & isolation
-- ✅ API design (REST + Status polling)
+- Async/Await trong Python (FastAPI)
+- Lua Scripts cho atomic operations
+- Message Queue pattern (Kafka)
+- Caching layer (Redis)
+- Database transaction & isolation
+- API design (REST + Status polling)
 
 ### **Cải tiến trong tương lai:**
 - [ ] WebSocket cho real-time updates
@@ -569,7 +569,7 @@ app.add_middleware(
 
 ---
 
-## 📞 Support
+## Support
 
 Nếu gặp vấn đề hoặc có câu hỏi, vui lòng:
 1. Kiểm tra phần **Troubleshooting**
@@ -578,6 +578,6 @@ Nếu gặp vấn đề hoặc có câu hỏi, vui lòng:
 
 ---
 
-**Happy coding! 🚀**
+**Happy coding!**
 
-Made with ❤️ by Voucher Flash Sale Team
+Made by Nguyen, Huy
