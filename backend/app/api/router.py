@@ -36,3 +36,38 @@ async def health_check(db: Session = Depends(get_db)):
         redis = redis_status,
         kafka = kafka_status,
     )
+
+
+#====================
+# Campaign Endpoints
+#====================
+
+@router.get("/campaigns", response_model = CampaignListResponse)
+async def get_campaigns(
+    db: Session = Depends(get_db),
+    status: str = Query(None, description = "Lọc theo trạng thái: SCHEDULED, ACTIVE, ENDED")
+    ):
+
+    # Lấy danh sách campaign từ DB
+    query = db.query(Campaign)
+
+    if status:
+        query = query.filter(Campaign.status == status)
+
+    campaigns = query.all()
+
+    return CampaignListResponse(
+        data = [CampaignResponse.model_validate(c) for c in campaigns],
+        total = len(campaigns)
+    )
+
+
+@router.get("/campaigns/{campaign_id}")
+async def get_campaign(campaign_id: int, db: Session = Depends(get_db)):
+    campaign = db.query(Campaign)
+    campaign = campaign.filter(Campaign.id == campaign_id).first()
+
+    if not campaign:
+        raise HTTPException(status_code=404, detail="Campaign not found")
+    
+    return CampaignResponse.model_validate(campaign)
