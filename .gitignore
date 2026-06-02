@@ -318,3 +318,6 @@ dump.rdb
 # Kafka logs (if running locally without Docker)
 kafka-logs/
 zookeeper-logs/
+
+# Local files
+.local*

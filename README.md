@@ -245,11 +245,11 @@ npm start
 ```
 Compiled successfully!
 webpack compiled with 1 warning
-Local:            http://localhost:3000
-On Your Network:  http://192.168.x.x:3000
+Local:            http://localhost:5175
+On Your Network:  http://192.168.x.x:5175
 ```
 
-Truy cập: **http://localhost:3000**
+Truy cập: **http://localhost:5175**
 
 ---
 
