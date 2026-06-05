@@ -159,5 +159,27 @@ async def claim_voucher(
             detail = "Bạn đã claim voucher này rồi"
         )
     
-    # Step 4
+    # Step 4.1
+    redis_key_inventory = f"voucher:{request.voucher_id}.inventory"
+    redis_key_lock = f"voucher:{request.user_id}.lock"
+
+    if not redis_client.exists(redis_key_inventory):
+        redis_client.set_inventory(request.voucher_id, voucher.calculate_remaning)
+
+    try:
+        redis_client.load_lua_script(
+            "claim_voucher",
+            "/app/scripts/claim_voucher.lua"
+        )
+    except:
+        pass
+    
+    redis_client.execute_lua_script(
+        "claim_voucher",
+        keys = [redis_key_inventory, redis_key_lock],
+        args = [settings.CLAIM_COOLDOWN_SECONDS]
+    )
+
+    # Step 4.2
+
     
