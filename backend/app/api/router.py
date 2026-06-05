@@ -225,3 +225,5 @@ async def claim_voucher(
 #====================
 # Check Claim Voucher Endpoint
 #====================
+
+@router
