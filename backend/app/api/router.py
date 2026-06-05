@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 from typing import List
 
@@ -22,6 +22,9 @@ from app.core.kafka_client import kafka_client
 from app.config import settings
 
 router = APIRouter(prefix="/api/v1", tags=["Voucher"])
+
+def utc_now():
+    return datetime.now(timezone.utc)
 
 # Health Check Endpoint
 @router.get("/health", response_model = HealthCheckResponse, tags =["System"])
@@ -174,12 +177,51 @@ async def claim_voucher(
     except:
         pass
     
-    redis_client.execute_lua_script(
+    result = redis_client.execute_lua_script(
         "claim_voucher",
         keys = [redis_key_inventory, redis_key_lock],
         args = [settings.CLAIM_COOLDOWN_SECONDS]
     )
 
     # Step 4.2
+    is_success = result[0]
+    message = result[1] if len(result) > 1 else "Unknown Error"
 
-    
+    if not is_success:
+        raise HTTPException(status_code=400, detail=message)
+
+
+    # Step 4.3
+    request_id = f"req_{uuid.uuid4().hex[:12]}"
+
+    claim_record = ClaimRecord(
+        user_id = request.user_id,
+        voucher_id = request.voucher_id,
+        campaign_id = voucher.campaign_id,
+        request_id = request_id,
+        status = ClaimStatusEnum.PENDING,
+        claimed_at = utc_now()
+    )
+
+    db.add(claim_record)
+    db.commit()
+
+    # Step 5
+    kafka_client.send_claim_event(
+        request_id = request_id,
+        user_id = request.user_id,
+        voucher_id = request.voucher_id,
+        campaign_id = voucher.campaign_id
+    )
+
+    # Step 6
+    return claimVoucherResponse(
+        status = "PROCESSING",
+        message = "Yêu cầu đang được xử lý",
+        request_id = request_id
+    )
+
+
+#====================
+# Check Claim Voucher Endpoint
+#====================

@@ -46,14 +46,6 @@ class claimVoucherResponse(BaseModel):
             }
         }
 
-    class config:
-        json_schema_extra = {
-            "example": {
-                "status": "PROCESSING",
-                "message": "Yêu cầu đang được xử lý",
-                "request_id": "req_abc123xyz"
-            }
-        }
 class checkclaimVoucherResponse(BaseModel):
     status: str = Field(..., description="PROCESSING")
     message: str = Field(..., description="Mô tả trạng thái")

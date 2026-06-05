@@ -40,7 +40,7 @@ class KafkaClient:
             logger.error(f"Error sending message to Kafka topic {topic}: {e}")
             return False
 
-    def send_claim_message(self, request_id: str, user_id: int, voucher_id: int, campaign_id: int) -> bool:
+    def send_claim_event(self, request_id: str, user_id: int, voucher_id: int, campaign_id: int) -> bool:
         """
         Send a claim message to Kafka
         Args:
