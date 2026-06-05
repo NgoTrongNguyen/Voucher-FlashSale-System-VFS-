@@ -226,4 +226,39 @@ async def claim_voucher(
 # Check Claim Voucher Endpoint
 #====================
 
-@router
+@router.get("/voucher/claim/{request_id}", response_model=checkclaimVoucherResponse)
+async def check_claim_status(
+    request_id: str,
+    db: Session = Depends(get_db)
+    ):
+
+    claim_record = db.query(ClaimRecord).filter(
+        ClaimRecord.request_id == request_id
+    ).first()
+
+    if not claim_record:
+        raise HTTPException(status_code=404, detail="Claim record not found")
+    
+    response = checkclaimVoucherResponse(
+        status = claim_record.status.value,
+        message = "",
+        voucher = None 
+    )
+
+    if claim_record.status == ClaimStatusEnum.PENDING:
+        response.message = "Yêu cầu đang được xử lý..."
+    elif claim_record.status == ClaimStatusEnum.SUCCESS:
+        response.message = "Voucher nhận thành công"
+        voucher = db.query(Voucher)
+        voucher = voucher.filter(Voucher.id == claim_record.voucher_id).first()    
+        if voucher:
+            response.message = {
+                "id": voucher.id,
+                "code": voucher.code,
+                "discount_type": voucher.discount_type,
+                "discount_value": voucher.discount_value
+            }
+    else:
+        response.message = claim_record.failure_reason or "Voucher claim thất bại"
+
+    return response
